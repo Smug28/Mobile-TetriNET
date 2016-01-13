@@ -1,0 +1,295 @@
+#:kivy 1.5.1
+
+
+<MainMenuScreen>:
+    FloatLayoutBG:
+        Image:
+            size: (480,293)
+            size_hint: (None, None)
+            pos_hint: {'center_x': .5, 'top': .97}
+            source: "crop/main_menu.png"
+        Button:
+            size_hint: (.7, .065)
+            pos_hint: {'center_x': .5, 'top': .6}
+            font_name: "font/Roboto-Regular.ttf"
+            font_size: "24dp"
+            text: root.STR_CONNECT
+            on_press: root.connect()
+        Button:
+            size_hint: (.7, .065)
+            pos_hint: {'center_x': .5, 'top': .49}
+            font_name: "font/Roboto-Regular.ttf"
+            font_size: "24dp"
+            text: root.STR_TUTORIAL
+            on_press: root.tutorial()
+        Button:
+            size_hint: (.7, .065)
+            pos_hint: {'center_x': .5, 'top': .38}
+            font_name: "font/Roboto-Regular.ttf"
+            font_size: "24dp"
+            text: root.STR_BOOKMARKS
+            on_press: root.bookmarks()
+        Button:
+            size_hint: (.7, .065)
+            pos_hint: {'center_x': .5, 'top': .27}
+            font_name: "font/Roboto-Regular.ttf"
+            font_size: "24dp"
+            text: root.STR_SETTINGS
+            on_press: root.settings()
+        Button:
+            size_hint: (.7, .065)
+            pos_hint: {'center_x': .5, 'top': .16}
+            font_name: "font/Roboto-Regular.ttf"
+            font_size: "24dp"
+            text: root.STR_DONATE
+            on_press: root.donate()
+
+<ActionBarScreen>:
+    layout: layout
+    FloatLayoutBG:
+        id: layout
+        BoxLayout:
+            orientation: 'vertical'
+            pos_hint: {'center_x': .5, 'top': 1}
+            size_hint: (1, .1)
+            FloatLayout:
+                size: (root.size[0], root.size[1]-4)
+                pos_hint: {'top':.9}
+                ActionBarImg:
+                    source: 'crop/icons/prev.png'
+                    size_hint: (.1, .9)
+                    pos_hint: {'x': 0, 'top':.9}
+                    height: self.texture_size[1] + 16
+                    on_press: root.prev()
+                ActionBarImg:
+                    source: 'crop/icons/launcher.png'
+                    size_hint: (.2, .9)
+                    height: self.texture_size[1] + 16
+                    pos_hint: {'x': .02, 'top':.9}
+                    on_press: root.prev()
+                Label:
+                    text: root.titleText
+                    font_name: "font/Roboto-Thin.ttf"
+                    size_hint: (.8, .9)
+                    height: self.texture_size[1] + 16
+                    text_size: self.width - 16, None
+                    pos_hint: {'x': .16, 'top':.9}
+                    font_size: "36dp" if root.size[1]+24 < self.size[1] else "24dp"
+            Widget:
+                size_hint_y: None
+                height: 4
+                canvas:
+                    Color:
+                        rgba: root.separator_color
+                    Rectangle:
+                        pos: self.x, self.y + root.separator_height / 2.
+                        size: self.width, root.separator_height
+
+<ConnectScreen>:
+    titleText: self.STR_CONNECTPOPUP
+    bookmark: bookmark
+    FloatLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            pos_hint: {'center_x': .5, 'top': 1}
+            size_hint: (1, .1)
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (.8, .4)
+            pos_hint: {'center_x': .5, 'top': .9}
+            Label:
+                text: root.STR_SERVER+":"
+                font_name: "font/Roboto-Regular.ttf"
+                font_size: "24dp"
+                size: self.texture_size
+                pos_hint: {'center_x':.5}
+                text_size: (root.width*.8, None)
+            TextInput:
+                id: serverInput
+                multiline: False
+                text: root.server[0]
+                on_focus: root.keyboardShow()
+            BoxLayout:
+                CheckBox:
+                    id: original
+                    group: 'tetrifast'
+                    active: True if root.server[-1] != 'tetrifast' else False
+                    size_hint_x: None
+                Label:
+                    text: root.STR_ORIGINAL
+                    font_name: "font/Roboto-Light.ttf"
+                    font_size: "20dp"
+                    size_hint_x: None
+                CheckBox:
+                    id: tetrifast
+                    group: 'tetrifast'
+                    active: True if root.server[-1] == 'tetrifast' else False
+                    size_hint_x: None
+                Label:
+                    text: root.STR_TETRIFAST
+                    font_name: "font/Roboto-Light.ttf"
+                    font_size: "20dp"
+                    size_hint_x: None
+            BoxLayout:
+                CheckBox:
+                    id: bookmark
+                    size_hint_x: None
+                Label:
+                    text: root.STR_ADD_TO_BOOKMARKS
+                    font_name: "font/Roboto-Light.ttf"
+                    font_size: "20dp"
+                    size_hint_x: None
+            Label:
+                text: root.STR_NICKNAME+":"
+                font_name: "font/Roboto-Regular.ttf"
+                font_size: "24dp"
+                size: self.texture_size
+                pos_hint: {'center_x':.5}
+                text_size: (root.width*.8, None)
+            TextInput:
+                id: nameInput
+                text: root.nickname
+                on_focus: root.keyboardShow()
+            Label:
+                text: root.STR_TEAM+":"
+                font_name: "font/Roboto-Regular.ttf"
+                font_size: "24dp"
+                size: self.texture_size
+                pos_hint: {'center_x':.5}
+                text_size: (root.width*.8, None)
+            TextInput:
+                id: teamInput
+                text: root.team
+                on_focus: root.keyboardShow()
+        Button:
+            text: root.STR_CONNECT
+            on_press: root.connect(nameInput, teamInput, serverInput, original, tetrifast)
+            size_hint: (.7, .065)
+            pos_hint: {'center_x': .5, 'top': .45}
+            font_name: "font/Roboto-Regular.ttf"
+            font_size: "24dp"
+
+<TextInput>:
+    font_name: "font/Roboto-Regular.ttf"
+    background_active: "crop/input-active.png"
+    background_normal: "crop/input-normal.png"
+    foreground_color: (1,1,1,1)
+
+<SideScreen>:
+    FloatLayoutBG:
+        GridLayout:
+            padding: 12
+            cols: 1
+            size_hint: None, None
+            pos: root.pos
+            size: root.size
+            Label:
+                text: root.text
+                font_name: "font/Roboto-Thin.ttf"
+                font_size: "36dp"
+                size_hint_y: None
+                height: self.texture_size[1] + 16
+                text_size: self.width - 16, None
+            Widget:
+                size_hint_y: None
+                height: 4
+                canvas:
+                    Color:
+                        rgba: root.separator_color
+                    Rectangle:
+                        pos: self.x, self.y + root.separator_height / 2.
+                        size: self.width, root.separator_height
+
+<Label>:
+    height: self.texture_size[1]
+    width: self.texture_size[0]
+
+<ScrollView>:
+    scroll_timeout: 100
+
+<SettingsScreen>:
+    titleText: self.STR_SETTINGS
+    language: language
+    FloatLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (.8, .6)
+            pos_hint: {'center_x': .5, 'top': .9}
+            Label:
+                text: root.STR_LANGUAGE_CHANGE+":"
+                font_name: "font/Roboto-Regular.ttf"
+                font_size: "24dp"
+                size: self.texture_size
+                pos_hint: {'center_x':.5}
+                text_size: (root.width*.8, None)
+            Button:
+                id: language
+                font_name: "font/Roboto-Regular.ttf"
+                font_size: "24dp"
+                background_normal: 'crop/dropdown-normal.png'
+                background_down: 'crop/dropdown-focus.png'
+            Label:
+                text: root.STR_RESET_DEFAULTS+":"
+                font_name: "font/Roboto-Regular.ttf"
+                font_size: "24dp"
+                size: self.texture_size
+                pos_hint: {'center_x':.5}
+                text_size: (root.width*.8, None)
+            Label:
+                text: root.STR_RESET_DEFAULTS_HELP
+                font_name: "font/Roboto-Regular.ttf"
+                font_size: "14dp"
+                size: self.texture_size
+                pos_hint: {'center_x':.5}
+                text_size: (root.width*.8, None)
+            Button:
+                text: root.STR_RESET
+                on_press: root.reset_defaults()
+                pos_hint: {'center_x': .5, 'top': .45}
+                font_name: "font/Roboto-Regular.ttf"
+                font_size: "24dp"
+
+<BookmarksScreen>:
+    titleText: self.STR_BOOKMARKS
+    scrollview: view
+    FloatLayout:
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (.8, .8)
+            pos_hint: {'center_x': .5, 'top': .85}
+            ScrollView:
+                id: view
+                do_scroll_x: False
+
+<TutorialScreen>:
+    prev_button: pbutton
+    next_button: nbutton
+    nameLabel: nlabel
+    FloatLayoutBG:
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (1,1)
+            Label:
+                id: nlabel
+                text: root.NAME
+                font_name: "font/Roboto-Light.ttf"
+                font_size: "36dp"
+                size_hint_y: .3
+                pos_hint: {'center_y':.5}
+            Image:
+                texture: root.FRAMES[root.CURRENT_FRAME]
+                allow_stretch: True
+            BoxLayout:
+                size_hint: (.8, .2)
+                pos_hint: {'center_y': .5, 'center_x': .5}
+                orientation: "horizontal"
+                Button:
+                    text: root.STR_PREV
+                    pos_hint: {'center_y':.5}
+                    size_hint_y: .6
+                    id: pbutton
+                Button:
+                    text: root.STR_NEXT
+                    pos_hint: {'center_y':.5}
+                    size_hint_y: .6
+                    id: nbutton

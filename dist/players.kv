@@ -1,0 +1,165 @@
+#:kivy 1.5.1
+
+
+<FloatLayoutBG>:
+    canvas:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            texture: self.texture
+
+<Arrow>:
+    size: self.texture_size
+    pos: self.pos
+    canvas:
+        Clear
+        Rectangle:
+            texture: self.texture
+            pos: self.pos
+            size: self.texture_size
+
+<Overlay>:
+    canvas:
+        Clear
+        Color:
+            rgba: (0.,.6,.8,.8)
+        Rectangle:
+            pos: self.pos[0]+47, self.pos[1]
+            size: self.size
+        Color:
+            rgba: (1,1,1,1)
+        Rectangle:
+            pos: self.pos[0]+50, self.pos[1]
+            size: self.size[0]-3, self.size[1]
+            texture: self.texture
+
+<PlayerName>:
+    text: self.text
+    canvas:
+        Clear
+        Color:
+            rgba: self.colored if self.state == 'normal' else (1,0,0,1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<Dock>:
+    canvas:
+        Clear
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            texture: self.texture
+    canvas.after:
+        Color:
+            rgba: self.bar_color[:3] + [self.bar_color[3] * self.bar_alpha if self.do_scroll_y else 0]
+        Rectangle:
+            pos: self.right - self.bar_width - self.bar_margin, self.y + self.height * self.vbar[0]
+            size: self.bar_width, self.height * self.vbar[1]
+        Color:
+            rgba: self.bar_color[:3] + [self.bar_color[3] * self.bar_alpha if self.do_scroll_x else 0]
+        Rectangle:
+            pos: self.x + self.width * self.hbar[0], self.y + self.bar_margin
+            size: self.width * self.hbar[1], self.bar_width
+
+<Special>:
+    size: self.size[1], self.size[1]
+    canvas.after:
+        Clear
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            texture: self.texture
+
+<SpecialOv>:
+    canvas.after:
+        Clear
+        Color:
+            rgba: [1,1,1,1]
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            texture: self.texture
+
+<PlayerMatrix>:
+    canvas:
+        Clear
+        Color:
+            rgba: (0,0,0,0) if self.state == 'normal' else (.6,.6,.6,1)
+        Rectangle:
+            pos: (self.pos[0]-3, self.pos[1]-3)
+            size: (self.size[0]+6, self.size[1]+6)
+        Color:
+            rgba: (.8666667,.8666667,.8666667,1)
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<GestureListener>:
+    size_hint: (.125, 1)
+
+<Toast>:
+    _container: container
+    size_hint: (.9, .07)
+    pos_hint: {'center_x': .5, 'y': .05}
+    GridLayout:
+        padding: 12
+        cols: 1
+        size_hint: None, None
+        pos: root.pos
+        size: root.size
+        BoxLayout:
+            id: container
+
+<Unread>:
+    size_hint: None, None
+    canvas:
+        Clear
+        Color:
+            rgba: [.071, .729, .973, .3]
+        Ellipse:
+            size: self.texture_size[0]+4 if self.texture_size[0] > self.texture_size[1] else self.texture_size[1]+4, self.texture_size[0]+4 if self.texture_size[0] > self.texture_size[1] else self.texture_size[1]+4
+            pos: self.pos[0]-(self.texture_size[0]/2)-2, self.pos[1]-2
+        Color:
+            rgba: self.color
+        Rectangle:
+            pos: self.pos
+            size: self.texture_size
+            texture: self.texture
+
+<Notification>:
+    unread: uread
+    Image:
+        source: 'crop/icons/chat.png'
+        size_hint: .1, None
+        pos_hint: {'x':0, 'center_y':.55}
+    Unread:
+        text: root.text
+        id: uread
+        size_hint: None, None
+        pos_hint: {'x':.081, 'center_y':.528}
+        font_size: '14dp'
+        font_name: "font/Roboto-Light.ttf"
+
+<NextPiece>:
+    pos_hint: {'right': 1, 'top': 1}
+    size_hint: .3, None
+    height: self.width
+    canvas:
+        Clear
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            texture: self.texture
+
+<Bookmark>:
+    canvas:
+        Clear
+        Color:
+            rgba: (1,1,1,.1)
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+<DelButton>:
+    width: self.height
